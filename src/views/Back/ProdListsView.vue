@@ -33,8 +33,8 @@
           <tr v-for="adminProd in adminProds" :key="adminProd.id">
             <td>{{ adminProd.category }}</td>
             <td
-              @click="temp = adminProd"
               class="text-decoration-underline cursor-pointer"
+              @click="openModal('detail', adminProd)"
             >
               {{ adminProd.title }}
             </td>
@@ -66,18 +66,21 @@
         </tbody>
       </table>
     </div>
-    {{ temp }}
   </div>
+
+  <AdminProdViewComponent :show-prod="createProdTemp"></AdminProdViewComponent>
+
   <CreateProdComponent
     :admin-prod="createProdTemp"
     :is-new="isNew"
     @get-adminprods="getAdminProds"
   ></CreateProdComponent>
 
-  <DelProdComponent
-    :admin-prod="createProdTemp"
-    @get-adminprods="getAdminProds"
-  ></DelProdComponent>
+  <DeleteComponent
+    :del-item="createProdTemp"
+    :page-name="pageName"
+    @get-item="getAdminProds"
+  ></DeleteComponent>
 </template>
 
 <script>
@@ -85,7 +88,10 @@
 import CreateProdComponent, {
   prodModal,
 } from "@/components/CreateProdComponent.vue";
-import DelProdComponent, { delModal } from "@/components/DelProdComponent.vue";
+import DeleteComponent, { delModal } from "@/components/DeleteComponent.vue";
+import AdminProdViewComponent, {
+  showAdminProdModal,
+} from "@/components/AdminProdViewComponent.vue";
 
 export default {
   data() {
@@ -95,6 +101,7 @@ export default {
       temp: {},
       isLoading: "",
       isNew: true,
+      pageName: "prodsList",
       createProdTemp: {
         imagesUrl: [],
       },
@@ -102,7 +109,8 @@ export default {
   },
   components: {
     CreateProdComponent,
-    DelProdComponent,
+    DeleteComponent,
+    AdminProdViewComponent,
   },
   methods: {
     getAdminProds() {
@@ -114,11 +122,11 @@ export default {
         .then((res) => {
           loader.hide();
           // 物件轉陣列
-          // this.adminProds = Object.keys(res.data.products)
-          //   .map((key) => res.data.products[key])
-          //   .reverse();
+          this.adminProds = Object.keys(res.data.products)
+            .map((key) => res.data.products[key])
+            .reverse();
 
-          this.adminProds = res.data.products;
+          // this.adminProds = res.data.products;
           this.pagination = res.data.pagination;
         })
         .catch((err) => {
@@ -139,10 +147,14 @@ export default {
         this.createProdTemp = JSON.parse(JSON.stringify(adminProd));
         prodModal.show();
         // console.log(this.createProdTemp);
-      } else {
+      } else if (txt === "delete") {
         this.isNew = false;
         this.createProdTemp = { ...adminProd };
         delModal.show();
+      } else if (txt === "detail") {
+        this.isNew = false;
+        this.createProdTemp = adminProd;
+        showAdminProdModal.show();
       }
     },
   },

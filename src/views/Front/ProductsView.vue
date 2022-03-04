@@ -18,12 +18,17 @@
             <p class="card-text text-truncate">
               {{ item.description }}
             </p>
-            <p class="text-end">
-              <del>$NTD {{ item.origin_price }}</del
-              ><span class="text-danger fw-bold ms-2"
-                >$NTD <b class="fs-3">{{ item.price }}</b></span
-              >
-            </p>
+            <div class="text-end">
+              <p v-if="item.price === item.origin_price">
+                <b class="">$NTD</b> <b class="fs-3">{{ item.price }}</b>
+              </p>
+              <p v-else class="text-end">
+                <del>$NTD {{ item.origin_price }}</del
+                ><span class="text-danger fw-bold ms-2"
+                  >$NTD <b class="fs-3">{{ item.price }}</b></span
+                >
+              </p>
+            </div>
           </div>
           <div class="card-footer">
             <div class="btn-group w-100">

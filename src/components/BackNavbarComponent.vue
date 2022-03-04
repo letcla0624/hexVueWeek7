@@ -30,6 +30,11 @@
               >顧客訂單</router-link
             >
           </li>
+          <li class="nav-item">
+            <router-link to="/admin/coupon" class="nav-link"
+              >優惠券</router-link
+            >
+          </li>
         </ul>
         <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
           <li class="nav-item">

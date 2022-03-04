@@ -26,14 +26,13 @@
           <div class="row">
             <div class="col-lg-7">
               <h5 class="h5">商品內容</h5>
-              {{ adminProd }}
               <div class="form-floating mb-3">
                 <input
                   type="text"
                   class="form-control border-0 border-bottom rounded-0"
                   id="title"
                   placeholder="商品名稱"
-                  v-model="adminProd.title"
+                  v-model="tempProd.title"
                 />
                 <label for="title">
                   <span class="text-danger me-1">*</span>商品名稱(title)
@@ -46,6 +45,7 @@
                       class="form-select border-0 border-bottom rounded-0"
                       id="categories"
                       aria-label="Floating label select"
+                      v-model="tempProd.category"
                     >
                       <option disabled>請選擇</option>
                       <option
@@ -69,6 +69,7 @@
                       class="form-control border-0 border-bottom rounded-0"
                       id="unit"
                       placeholder="單位"
+                      v-model="tempProd.unit"
                     />
                     <label for="unit"
                       ><span class="text-danger me-1">*</span>單位(unit)</label
@@ -85,6 +86,7 @@
                       id="origin_price"
                       placeholder="原價"
                       min="0"
+                      v-model="tempProd.origin_price"
                     />
                     <label for="origin_price"
                       ><span class="text-danger me-1">*</span>原價(origin
@@ -100,6 +102,7 @@
                       id="price"
                       placeholder="售價"
                       min="0"
+                      v-model="tempProd.price"
                     />
                     <label for="price"
                       ><span class="text-danger me-1">*</span>售價(price)</label
@@ -113,6 +116,7 @@
                   placeholder="Leave a comment here"
                   id="description"
                   style="height: 200px"
+                  v-model="tempProd.description"
                 ></textarea>
                 <label for="description">商品描述(description)</label>
               </div>
@@ -122,6 +126,7 @@
                   placeholder="Leave a comment here"
                   id="content"
                   style="height: 200px"
+                  v-model="tempProd.content"
                 ></textarea>
                 <label for="content">商品規格(content)</label>
               </div>
@@ -130,6 +135,7 @@
                   class="form-check-input"
                   type="checkbox"
                   id="is_enabled"
+                  v-model="tempProd.is_enabled"
                   :true-value="1"
                   :false-value="0"
                 />
@@ -138,7 +144,93 @@
                 </label>
               </div>
             </div>
-            <div class="col-lg-5"></div>
+            <div class="col-lg-5">
+              <h5 class="h5">商品圖片</h5>
+              <div class="row g-0 align-items-center">
+                <div class="col-11">
+                  <div class="form-floating mb-3">
+                    <input
+                      type="text"
+                      class="form-control border-0 border-bottom rounded-0"
+                      id="imageUrl"
+                      placeholder="主要圖片網址"
+                      v-model="tempProd.imageUrl"
+                    />
+                    <label for="imageUrl"
+                      ><span class="text-danger me-1">*</span
+                      >主要圖片網址</label
+                    >
+                  </div>
+                </div>
+                <div class="col-1">
+                  <button
+                    class="btn btn-outline-danger border-0"
+                    @click="clear"
+                  >
+                    <i class="bi bi-trash-fill"></i>
+                  </button>
+                </div>
+
+                <img :src="tempProd.imageUrl" class="w-100" />
+              </div>
+              <h5 class="h5 mt-4">其餘圖片</h5>
+              <!-- 如果有按下新增圖片或原本就有圖片的話 -->
+              <div v-if="Array.isArray(tempProd.imagesUrl)">
+                <div
+                  v-for="(otherPic, key) in tempProd.imagesUrl"
+                  :key="otherPic"
+                >
+                  <div class="row g-0 align-items-center">
+                    <div class="col-11">
+                      <div class="form-floating mb-3">
+                        <input
+                          type="text"
+                          class="form-control border-0 border-bottom rounded-0"
+                          :id="`imagesUrl${Number.parseInt(key)}`"
+                          placeholder="圖片網址"
+                          v-model="tempProd.imagesUrl[key]"
+                        />
+                        <label :for="`imagesUrl${Number.parseInt(key)}`"
+                          >圖片網址</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col-1">
+                      <button
+                        class="btn btn-outline-danger border-0"
+                        @click="delPics(key, otherPic)"
+                      >
+                        <i class="bi bi-trash-fill"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <img :src="otherPic" class="w-100" />
+                </div>
+                <div
+                  v-if="
+                    !tempProd.imagesUrl.length ||
+                    tempProd.imagesUrl[tempProd.imagesUrl.length - 1]
+                  "
+                >
+                  <div class="d-grid mt-3">
+                    <button class="btn btn-outline-dark" @click="addPics">
+                      新增其餘圖片
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- 如果沒有圖片的話 -->
+              <div v-else>
+                <div class="d-grid mt-3">
+                  <button
+                    class="btn btn-outline-dark"
+                    @click="(this.tempProd.imagesUrl = []), addPics()"
+                  >
+                    新增其餘圖片
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -176,12 +268,19 @@ export default {
   props: ["adminProd", "isNew"],
   data() {
     return {
+      tempProd: {},
       categories: ["蛋糕", "甜甜圈", "馬卡龍"],
     };
   },
-
+  watch: {
+    adminProd() {
+      this.tempProd = this.adminProd;
+    },
+  },
   methods: {
+    // 新增／更新按鈕
     upProdBtn() {
+      let loader = this.$loading.show();
       let api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/product`;
       let httpMethod = "post";
 
@@ -192,7 +291,7 @@ export default {
 
       this.$http[httpMethod](api, { data: this.adminProd })
         .then((res) => {
-          // console.log(res.data);
+          loader.hide();
           this.$emit("get-adminprods");
           prodModal.hide();
           setTimeout(() => {
@@ -200,9 +299,20 @@ export default {
           }, 1000);
         })
         .catch((err) => {
-          console.dir(err.response);
-          prodModal.hide();
+          loader.hide();
+          alert(err.response.data.message);
         });
+    },
+    // modal 裡新增其餘圖片
+    addPics() {
+      this.tempProd.imagesUrl.push("");
+    },
+    // modal 裡刪除其餘圖片
+    delPics(key) {
+      this.tempProd.imagesUrl.splice(key, 1);
+    },
+    clear() {
+      this.tempProd.imageUrl = "";
     },
   },
   mounted() {

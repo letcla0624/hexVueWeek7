@@ -12,7 +12,7 @@
           <h5 class="modal-title" id="delModalLabel">
             <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i
             >熊孩子，您確定要刪除<span class="text-danger mx-1">{{
-              adminProd.title
+              delItem.title
             }}</span
             >嗎？
           </h5>
@@ -35,7 +35,7 @@
           <button
             type="button"
             class="btn btn-danger"
-            @click="delProdBtn(adminProd.id)"
+            @click="delProdBtn(delItem.id)"
           >
             <i class="bi bi-trash-fill me-1"></i>確定刪除
           </button>
@@ -50,16 +50,24 @@
 
 export let delModal = null;
 export default {
-  props: ["adminProd"],
+  props: ["delItem", "pageName"],
   methods: {
-    // 刪除單一商品
-    delProdBtn(adminProdId) {
+    // 刪除單一項目
+    delProdBtn(id) {
+      let api = "";
+
+      if (this.pageName === "prodsList") {
+        api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/product/${id}`;
+      } else if (this.pageName === "orders") {
+        api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/order/${id}`;
+      } else if (this.pageName === "coupons") {
+        api = `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/coupon/${id}`;
+      }
+
       this.$http
-        .delete(
-          `${process.env.VUE_APP_API}/api/${process.env.VUE_APP_PATH}/admin/product/${adminProdId}`
-        )
+        .delete(api)
         .then((res) => {
-          this.$emit("get-adminprods");
+          this.$emit("get-item");
           delModal.hide();
           setTimeout(() => {
             alert(res.data.message);

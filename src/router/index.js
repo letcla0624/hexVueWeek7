@@ -95,6 +95,10 @@ const routes = [
         path: "orders",
         component: () => import("@/views/Back/OrdersView.vue"),
       },
+      {
+        path: "coupon",
+        component: () => import("@/views/Back/CouponView.vue"),
+      },
     ],
   },
 ];

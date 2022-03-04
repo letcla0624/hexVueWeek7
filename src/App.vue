@@ -35,4 +35,8 @@ nav {
   box-shadow: none;
   border-bottom: 2px solid var(--bs-secondary) !important;
 }
+.form-check-input:checked {
+  background-color: var(--bs-warning);
+  border-color: var(--bs-warning);
+}
 </style>

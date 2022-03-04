@@ -35,12 +35,19 @@
           <span class="badge bg-warning text-dark">{{ prod.category }}</span>
         </div>
         <h2 class="h5 text-secondary lh-base">{{ prod.description }}</h2>
-        <p class="text-end">
-          <del>$NTD {{ prod.origin_price }}</del
-          ><span class="text-danger fw-bold ms-2"
-            >$NTD <b class="fs-3">{{ prod.price }}</b></span
-          >
-        </p>
+        <div class="text-end">
+          <p v-if="prod.price === prod.origin_price">
+            售價：<b class="">$NTD</b> <b class="fs-3">{{ prod.price }}</b>
+            {{ prod.unit }} / 元
+          </p>
+          <p v-else class="text-end">
+            <del>$NTD {{ prod.origin_price }}</del
+            ><span class="text-danger fw-bold ms-2"
+              >$NTD <b class="fs-3">{{ prod.price }}</b></span
+            >
+            {{ prod.unit }} / 元
+          </p>
+        </div>
         <div class="d-grid gap-2 d-md-flex">
           <div class="input-group">
             <button type="button" class="btn btn-dark" @click="minus">-</button>
