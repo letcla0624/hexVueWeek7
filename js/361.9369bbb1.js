@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkhexVueWeek7"]=self["webpackChunkhexVueWeek7"]||[]).push([[361],{5361:function(e,n,t){t.r(n),t.d(n,{default:function(){return f}});var r=t(3396);const u={class:"container text-center"},c=(0,r._)("h1",{class:"py-3"},"404",-1),s=(0,r._)("p",null,"頁面消失了～",-1),a=(0,r.Uk)("回到首頁");function l(e,n){const t=(0,r.up)("router-link");return(0,r.wg)(),(0,r.iD)("div",u,[c,s,(0,r.Wm)(t,{to:"/",class:"btn btn-warning"},{default:(0,r.w5)((()=>[a])),_:1})])}var i=t(89);const o={},k=(0,i.Z)(o,[["render",l]]);var f=k}}]);
+//# sourceMappingURL=361.9369bbb1.js.map

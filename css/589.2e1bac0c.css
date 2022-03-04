@@ -1,0 +1,1 @@
+.breadcrumb>li{cursor:pointer;text-decoration:underline;color:var(--bs-warning);font-weight:700}.breadcrumb>li:last-child{cursor:default;text-decoration:none;color:var(--bs-secondary);font-weight:400}

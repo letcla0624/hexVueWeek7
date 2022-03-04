@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkhexVueWeek7"]=self["webpackChunkhexVueWeek7"]||[]).push([[541],{8541:function(e,n,t){t.r(n),t.d(n,{default:function(){return k}});var r=t(3396);const c={class:"container"},u=(0,r._)("h1",{class:"text-center py-3"},"後台首頁",-1),s=[u];function a(e,n){return(0,r.wg)(),(0,r.iD)("div",c,s)}var i=t(89);const f={},h=(0,i.Z)(f,[["render",a]]);var k=h}}]);
+//# sourceMappingURL=541.132da88f.js.map
